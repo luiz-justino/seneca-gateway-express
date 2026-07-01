@@ -9,9 +9,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/senecajs/seneca-gateway-express/badge.svg?branch=main)](https://coveralls.io/github/senecajs/seneca-gateway-express?branch=main)
 [![DeepScan grade](https://deepscan.io/api/teams/5016/projects/19454/branches/505564/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=5016&pid=19454&bid=505564)
 [![Maintainability](https://api.codeclimate.com/v1/badges/ccde6cd6b95d0877647d/maintainability)](https://codeclimate.com/github/senecajs/seneca-gateway-express/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/senecajs/seneca-gateway-express/badge.svg?branch=main)](https://coveralls.io/github/senecajs/seneca-gateway-express?branch=main)
-[![DeepScan grade](https://deepscan.io/api/teams/5016/projects/19454/branches/505564/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=5016&pid=19454&bid=505564)
-[![Maintainability](https://api.codeclimate.com/v1/badges/ccde6cd6b95d0877647d/maintainability)](https://codeclimate.com/github/senecajs/seneca-gateway-express/maintainability)
 
 | ![Voxgig](https://www.voxgig.com/res/img/vgt01r.png) | This open source module is sponsored and supported by [Voxgig](https://www.voxgig.com). |
 |---|---|
