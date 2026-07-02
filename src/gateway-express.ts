@@ -23,10 +23,16 @@ type GatewayExpressOptions = {
     // Use the default express error handler for errors
     next: boolean
   },
+  modify?: {
+    req?: (req: any) => any
+    res?: (req: any, msg: any, out: any) => any
+  }
 }
 
 
 type GatewayExpressDirective = {
+  done?: boolean
+
   // Call Express response.next (passes error if defined)
   next?: boolean
 
@@ -74,27 +80,51 @@ function gateway_express(this: any, options: GatewayExpressOptions) {
 
 
   async function handler(req: any, res: any, next: any) {
+    if (options.modify?.req) {
+      req = await options.modify.req.call(req.seneca$, req)
+    }
+
     const body = req.body
 
     const json = 'string' === typeof body ? parseJSON(body) : body
 
+    // console.log('BODY', json)
+
+    let headers = null == req.headers ? {} : Object
+      .entries(req.headers)
+      .reduce(
+        (a: any, entry: any) => (a[entry[0].toLowerCase()] = entry[1], a),
+        ({} as any)
+      )
+
+
     // TODO: doc as a standard feature
     // TODO: implement in other gateways
-    // TODO: headers & body as per gateway-lambda
     json.gateway = {
-      params: req.params,
-      query: req.query,
+      params: req.params || {},
+      query: req.query || {},
+      body: req.body,
+      headers,
     }
 
     if (json.error$) {
       return res.status(400).send(json)
     }
 
-    const result: GatewayResult = await gateway(json, { req, res })
+    let result: GatewayResult = await gateway(json, { req, res })
+
+    if (options.modify?.res) {
+      result = await options.modify?.res.call(req.seneca$, req, json, result)
+    }
+
 
     let gateway$: GatewayExpressDirective | undefined = result.gateway$
 
     if (gateway$) {
+      if (gateway$.done) {
+        return res.send(result.out)
+      }
+
       if (gateway$.auth && options.auth) {
         if (gateway$.auth.token) {
           res.cookie(
@@ -193,6 +223,10 @@ gateway_express.defaults = {
   },
   error: {
     next: false
+  },
+  modify: {
+    req: undefined,
+    res: undefined,
   }
 }
 
